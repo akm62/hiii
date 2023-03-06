@@ -1,7 +1,7 @@
 package generator;
 
 import io.swagger.v3.oas.models.OpenAPI;
-import io.vertx.reactivex.ext.web.Router;
+import io.vertx.ext.web.Router;
 
 import java.util.HashMap;
 import java.util.Map;

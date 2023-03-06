@@ -58,9 +58,6 @@ dependencies {
   implementation("io.vertx:vertx-core")
 
   testImplementation("io.vertx:vertx-junit5")
-  testImplementation("io.vertx:vertx-junit5")
-  testImplementation("io.vertx:vertx-junit5")
-  testImplementation("io.vertx:vertx-junit5")
   testImplementation("com.google.dagger:dagger:2.25.4")
   testImplementation("org.junit.jupiter:junit-jupiter:$junitJupiterVersion")
   testImplementation("io.vertx:vertx-junit5:$vertxVersion")

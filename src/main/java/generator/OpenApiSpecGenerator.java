@@ -10,8 +10,8 @@ import io.swagger.v3.oas.models.servers.Server;
 import io.vertx.core.Handler;
 import io.vertx.core.http.HttpMethod;
 import io.vertx.ext.web.Route;
+import io.vertx.ext.web.Router;
 import io.vertx.ext.web.RoutingContext;
-import io.vertx.reactivex.ext.web.Router;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -28,7 +28,7 @@ import java.util.stream.Collectors;
 public final class OpenApiSpecGenerator {
     private static final Logger log = LoggerFactory.getLogger(OpenApiSpecGenerator.class);
 
-    public static OpenAPI generateOpenApiSpecFromRouter(io.vertx.reactivex.ext.web.Router router, String title, String version, String serverUrl) {
+    public static OpenAPI generateOpenApiSpecFromRouter(io.vertx.ext.web.Router router, String title, String version, String serverUrl) {
         log.info("Generating Spec for vertx routes.");
         OpenAPI openAPI = new OpenAPI();
         Info info = new Info();
@@ -45,13 +45,13 @@ public final class OpenApiSpecGenerator {
         return openAPI;
     }
 
-    static private Map<String, PathItem> extractAllPaths(Router router) {
+    static private Map<String, PathItem> extractAllPaths(io.vertx.ext.web.Router router) {
         return router.getRoutes().stream().filter(x -> x.getPath() != null)
-//                .map(Route::getPath).distinct().collect(Collectors.toMap(x -> x, x -> new PathItem()))
-                .map(io.vertx.reactivex.ext.web.Route::getPath).distinct().collect(Collectors.toMap(x -> x, x -> new PathItem()));
+                .map(Route::getPath).distinct().collect(Collectors.toMap(x -> x, x -> new PathItem()));
+//                .map(io.vertx.reactivex.ext.web.Route::getPath).distinct().collect(Collectors.toMap(x -> x, x -> new PathItem()));
     }
 
-    static private void extractOperationInfo(io.vertx.reactivex.ext.web.Router router, Map<String, PathItem> paths) {
+    static private void extractOperationInfo(io.vertx.ext.web.Router router, Map<String, PathItem> paths) {
         router.getRoutes().forEach(route -> {
             PathItem pathItem = paths.get(route.getPath());
             if (pathItem != null) {
@@ -62,7 +62,7 @@ public final class OpenApiSpecGenerator {
         decorateOperationsFromAnnotationsOnHandlers(router, paths);
     }
 
-    private static void decorateOperationsFromAnnotationsOnHandlers(io.vertx.reactivex.ext.web.Router router, Map<String, PathItem> paths) {
+    private static void decorateOperationsFromAnnotationsOnHandlers(Router router, Map<String, PathItem> paths) {
         router.getRoutes().stream().filter(x -> x.getPath() != null).forEach(route -> {
             try {
               Field stateF = route.getClass().getDeclaredField("state");
@@ -135,7 +135,7 @@ public final class OpenApiSpecGenerator {
         }).collect(Collectors.toList());
     }
 
-    private static List<Operation> extractOperations(io.vertx.reactivex.ext.web.Route route, PathItem pathItem) {
+    private static List<Operation> extractOperations(Route route, PathItem pathItem) {
         try {
           Field stateF = route.getClass().getDeclaredField("state");
           stateF.setAccessible(true);
