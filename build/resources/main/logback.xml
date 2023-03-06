@@ -1,0 +1,27 @@
+<configuration>
+    <variable name="LOG_LEVEL" value="${LOG_LEVEL:-DEBUG}" />
+
+    <!--appender name="console" -->
+    <appender name="console" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder class="net.logstash.logback.encoder.LogstashEncoder">
+
+        </encoder>
+
+    </appender>
+
+    <logger name="io.netty">
+        <level value="info" />
+    </logger>
+
+    <logger name="io.grpc.netty">
+        <level value="info" />
+    </logger>
+
+    <logger name="org.apache.kafka">
+        <level value="info" />
+    </logger>
+
+    <root level="${LOG_LEVEL}">
+        <appender-ref ref="console" />
+    </root>
+</configuration>
